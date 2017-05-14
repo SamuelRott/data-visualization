@@ -1,6 +1,10 @@
 # Data-vizualisation
 
-This repo is a playground for Data-vizualisation using d3 and the data from [radio4000-api](https://github.com/Internet4000/radio4000-api-docs)
+This repo is a playground for Data-vizualisation using [D3](https://github.com/d3) and data from [radio4000-api](https://github.com/Internet4000/radio4000-api-docs)
+
+# React boilerplate
+
+Thank you [pfft](https://github.com/jfalxa/pfft)
 
 ## Scripts
 
