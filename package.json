@@ -27,6 +27,7 @@
     "clean": "react-app clean",
     "coverage": "react-app coverage",
     "start": "react-app start",
-    "test": "react-app test"
+    "test": "react-app test",
+    "deploy": "react-app build && cp -R src/css public/css && mv public/index.html public/200.html; surge public r4-visualization.surge.sh && mv public/200.html public/index.html"
   }
 }
