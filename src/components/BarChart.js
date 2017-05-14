@@ -28,35 +28,38 @@ class BarChart extends React.Component
 				}
 				return channels.map(channel => {
 					if (!channel.tracks){
-						return 0;
+						return {
+							value: 0,
+							title: channel.title
+						};
 					}
-					return channel.tracks.length
+					return {
+						value: channel.tracks.length,
+						title: channel.title
+					}
 				})
+
 		}
 
 		displayBarChart()
 		{
-				const min = d3.min(this.state.d3Data);
-				const max = d3.max(this.state.d3Data);
-
-				console.log(max);
+				const min = d3.min(this.state.d3Data, x => x.value);
+				const max = d3.max(this.state.d3Data, x => x.value);
+				console.log(this.state.d3Data);
 				const scale = d3.scaleLinear()
-					.domain([0, max])
-					.range([0, window.innerWidth-100]);
+					.domain([min, max])
+					.range([min, window.innerWidth-100]);
 
 				const p = d3.select(this.chart).selectAll("div")
-					.data(this.state.d3Data)
-					.text(d => {
-						return d;
-					});
+					.data(this.state.d3Data.sort(function (a, b) {return a.value - b.value;}).reverse());
 
 				p.enter()
 					.append("div")
-						.attr("class", "bar-chart--div")
+						.attr("class", "bar-chart")
 						.transition()
 						.duration(1000)
-						.style("width", d => scale(d) + "px")
-						.text(d => d);
+						.style("width", x => scale(x.value) + "px")
+						.text((x) => `${x.title} - ${x.value}`);
 
 				p.exit()
 					.remove();
@@ -76,8 +79,6 @@ class BarChart extends React.Component
 				.catch();
 
 		}
-
-
 
 		render()
 		{
