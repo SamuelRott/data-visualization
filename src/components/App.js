@@ -1,5 +1,6 @@
 import React  from 'react';
 import styled from 'styled-components';
+import BarChart from 'src/components/BarChart'
 
 
 const Container = styled.div`
@@ -11,7 +12,7 @@ export default function App( props )
     return (
 
         <Container>
-            <h1>Salut</h1>
+            <BarChart/>
         </Container>
 
     );
