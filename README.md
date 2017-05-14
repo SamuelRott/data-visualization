@@ -1,4 +1,6 @@
-# React App
+# Data-vizualisation
+
+This repo is a playground for Data-vizualisation using d3 and the data from [radio4000-api](https://github.com/Internet4000/radio4000-api-docs)
 
 ## Scripts
 
