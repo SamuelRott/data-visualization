@@ -1,5 +1,6 @@
 import React  from 'react';
 import * as d3 from 'd3';
+import take from 'lodash/take';
 import 'whatwg-fetch';
 
 import serverConstants from 'src/constants/server';
@@ -30,11 +31,13 @@ class SvgBarChart extends React.Component
 				if (!channel.tracks){
 					return {
 						value: 0,
+						slug: channel.slug,
 						title: channel.title
 					};
 				}
 				return {
 					value: channel.tracks.length,
+					slug: channel.slug,
 					title: channel.title
 				}
 			})
@@ -47,21 +50,24 @@ class SvgBarChart extends React.Component
 	{
 			const min = d3.min(this.state.d3Data, x => x.value);
 			const max = d3.max(this.state.d3Data, x => x.value);
-			const width = window.innerWidth-200;
+			const width = window.innerWidth;
 			const barHeight = 25;
 
 			const r4Data = this.state.d3Data.sort(function (a, b) {return a.value - b.value;}).reverse();
 
+			const firstsNChannels = take(r4Data, 50);
+
+			console.log(firstsNChannels);
 			const scale = d3.scaleLinear()
 				.domain([min, max])
-				.range([0, width]);
+				.range([0, width-200]);
 
 			const chart = d3.select(this.chart)
-		    .attr("width", width)
-		    .attr("height", barHeight * this.state.d3Data.length);
+		    .attr("width", width-50)
+		    .attr("height", barHeight * firstsNChannels.length);
 
 			const bar = chart.selectAll("g")
-		    .data(r4Data)
+		    .data(firstsNChannels)
 				.enter()
 						.append("g")
 	    			.attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
@@ -70,11 +76,14 @@ class SvgBarChart extends React.Component
 		    .attr("width", x => scale(x.value))
 		    .attr("height", barHeight - 1);
 
-			bar.append("text")
-		    .attr("x", 0)
-		    .attr("y", barHeight / 2)
-		    .attr("dy", ".35em")
-		    .text((x) => `${x.value} - ${x.title}`);
+
+			bar.append("a")
+						.attr("xlink:href", (x) => "https://radio4000.com/" + `${x.slug}`)
+						.append("text")
+						.attr("x", x => scale(x.value)+8)
+						.attr("y", barHeight / 2)
+						.attr("dy", ".35em")
+						.text((x) => `${x.value} - ${x.title}`);
 
 	}
 
@@ -101,7 +110,7 @@ class SvgBarChart extends React.Component
 			return (
 
 				<div>
-					<h1>Svg bar-chart</h1>
+					<h1>First 50 channels</h1>
 					<svg className="SvgBarChart" ref={(r) => this.chart = r}></svg>
 				</div>
 
