@@ -11,11 +11,12 @@ class SharedTrack extends React.Component
 				super(props);
 				this.state = {
 					channels: null,
-					d3Data: null
+					channelsId: null,
+					ytids: null
 				}
 		}
 
-		getApi()
+		getApiChannels()
 		{
 			return fetch(`${serverConstants.apiEndpoint}/channels`)
 				.then(res => res.json())
@@ -23,49 +24,58 @@ class SharedTrack extends React.Component
 
 		transformChannelsData(channels)
 		{
-				console.log(channels);
 				if (!channels){
 					return;
 				}
 				return channels.map(channel => {
-					// if (!channel.tracks){
-					// 	return {
-					// 		value: 0,
-					// 		title: channel.title
-					// 	};
-					// }
-					// return {
-					// 	value: channel.tracks.length,
-					// 	title: channel.title
-					// }
+					if (!channel.id){
+						return;
+					}
+					return channel.id;
 				})
 
 		}
 
-		// 1.fetch all channels
-		// 2.iterate each element and
-		//    get tracks list
-		//    store it
-		// 2.compact all tracks list in 1 array https://lodash.com/docs/4.17.4#compact
-		// 3.remove all unique string https://lodash.com/docs/4.17.4#xor
-		// 3.find the most frequent id
-		// 		store it
-		// 		remove it from the array https://lodash.com/docs/4.17.4#pull
-		// 		repeat strep 3
-		//
+		getApiTracks(channelId)
+		{
+			return fetch(`${serverConstants.apiEndpoint}/channels/${channelId}/tracks`)
+				.then(res => res.json())
+		}
+
+		transformChannelsIdData(channelsId)
+		{
+				console.log(channelsId);
+				if (!channelsId){
+					return;
+				}
+				// 4. loop array fetch https://api.radio4000.com/v1/channels/ channel.id / tracks
+				return channelsId.map(channelId => {
+					this.getApiTracks(channelId)
+				})
+		}
+
+		// 1. fetch all channel https://api.radio4000.com/v1/channels
+		// 2. get all channel.id
+		// 3. store the ids in an array
+		// 5. get all track.ytid
+		// 6. store the ytids in an array
+		// 7. remove all unique entry
+		// 8. compare the rest to find most frequetnt entry, store it, remove it, repeat.
+
 
 
 		componentDidMount()
 		{
-
-				this.getApi().then(channels => {
+				this.getApiChannels().then(channels => {
 						this.setState({
 							channels,
-							d3Data: this.transformChannelsData(channels)
+							channelsId: this.transformChannelsData(channels),
 						});
+						// console.log();
+						this.transformChannelsIdData(this.state.channelsId);
 				})
-				.catch();
 
+				.catch();
 		}
 
 		render()
