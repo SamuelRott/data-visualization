@@ -1,6 +1,7 @@
 import React  from 'react';
 import * as d3 from 'd3';
 import take from 'lodash/take';
+import sum from 'lodash/sum';
 import 'whatwg-fetch';
 
 import serverConstants from 'src/constants/server';
@@ -12,7 +13,8 @@ class SvgBarChart extends React.Component
 			super(props);
 			this.state = {
 				channels: null,
-				d3Data: null
+				d3Data: null,
+				tracks: null
 			}
 	}
 
@@ -57,7 +59,6 @@ class SvgBarChart extends React.Component
 
 			const firstsNChannels = take(r4Data, 50);
 
-			console.log(firstsNChannels);
 			const scale = d3.scaleLinear()
 				.domain([min, max])
 				.range([0, width-200]);
@@ -87,15 +88,31 @@ class SvgBarChart extends React.Component
 
 	}
 
+	numberOfTracks(channels)
+	{
+		if (!channels){
+			return;
+		}
+		return channels.map(channelValue => {
+			if (!channelValue.tracks){
+				return 0;
+			}
+			return channelValue.tracks.length;
+		})
+	}
+
+
 	componentDidMount()
 	{
 
 			this.getApi().then(channels => {
 				this.setState({
 					channels,
-					d3Data: this.transformChannelsData(channels)
+					d3Data: this.transformChannelsData(channels),
+					tracks: this.numberOfTracks(channels)
 				});
 				this.displaySvgBarChart();
+
 			})
 			.catch();
 
@@ -106,11 +123,13 @@ class SvgBarChart extends React.Component
 	render()
 	{
 
-
 			return (
 
 				<div>
+					<h1>Currently {sum(this.state.tracks)} tracks on radio4000</h1>
+					<br/>
 					<h1>First 50 channels</h1>
+					<br/>
 					<svg className="SvgBarChart" ref={(r) => this.chart = r}></svg>
 				</div>
 
