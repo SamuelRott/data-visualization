@@ -1,6 +1,9 @@
 import React  from 'react';
 import styled from 'styled-components';
+
 import BarChart from 'src/components/BarChart'
+import SvgBarChart from 'src/components/SvgBarChart'
+
 
 
 const Container = styled.div`
@@ -12,7 +15,8 @@ export default function App( props )
     return (
 
         <Container>
-            <BarChart/>
+          <BarChart/>
+          <SvgBarChart/>
         </Container>
 
     );

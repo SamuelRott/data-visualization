@@ -7,3 +7,15 @@
   color: white;
   min-width: 100px;
 }
+
+
+.SvgBarChart rect {
+  fill: #5e1ae6;
+}
+
+.SvgBarChart text {
+  fill: red;
+  font: 12px sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-anchor: start;
+}
