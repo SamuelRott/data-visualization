@@ -45,13 +45,15 @@ class BarChart extends React.Component
 		{
 				const min = d3.min(this.state.d3Data, x => x.value);
 				const max = d3.max(this.state.d3Data, x => x.value);
-				console.log(this.state.d3Data);
+
+				const r4Data = this.state.d3Data.sort(function (a, b) {return a.value - b.value;}).reverse();
+
 				const scale = d3.scaleLinear()
 					.domain([min, max])
 					.range([min, window.innerWidth-100]);
 
 				const p = d3.select(this.chart).selectAll("div")
-					.data(this.state.d3Data.sort(function (a, b) {return a.value - b.value;}).reverse());
+					.data(r4Data);
 
 				p.enter()
 					.append("div")
@@ -87,7 +89,7 @@ class BarChart extends React.Component
 			return (
 
 				<div>
-				  <h1>lol</h1>
+				  <h1>Div bar-chart</h1>
 					<div ref={(r) => this.chart = r}></div>
 
 				</div>
