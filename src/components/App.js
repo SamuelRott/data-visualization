@@ -8,7 +8,7 @@ import SharedTrack from 'src/components/SharedTrack'
 
 
 const Container = styled.div`
-    color: #00F;
+    color: #fff;
 `;
 
 export default function App( props )

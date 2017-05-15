@@ -8,13 +8,17 @@
   min-width: 100px;
 }
 
+body {
+  background-color: black;
+  font: 12px sans-serif;
+}
 
 .SvgBarChart rect {
   fill: #5e1ae6;
 }
 
 .SvgBarChart text {
-  fill: red;
+  fill: white;
   font: 12px sans-serif;
   -webkit-font-smoothing: antialiased;
   text-anchor: start;
