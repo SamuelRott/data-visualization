@@ -1,5 +1,6 @@
 import React  from 'react';
 import * as d3 from 'd3';
+import compact from 'lodash/compact';
 import 'whatwg-fetch';
 
 import serverConstants from 'src/constants/server';
@@ -18,8 +19,8 @@ class SharedTrack extends React.Component
 
 		getApiChannels()
 		{
-			return fetch(`${serverConstants.apiEndpoint}/channels`)
-				.then(res => res.json())
+				return fetch(`${serverConstants.apiEndpoint}/channels`)
+					.then(res => res.json())
 		}
 
 		transformChannelsData(channels)
@@ -38,44 +39,55 @@ class SharedTrack extends React.Component
 
 		getApiTracks(channelId)
 		{
-			return fetch(`${serverConstants.apiEndpoint}/channels/${channelId}/tracks`)
-				.then(res => res.json())
+				// radio with tracks
+				// return fetch(`${serverConstants.apiEndpoint}/channels/-J_Gj6nryBGVLHrmfZ10/tracks`)
+				// radio with no tracks
+				// return fetch(`${serverConstants.apiEndpoint}/channels/-KbLsrdpcPPkGHzXyVBX/tracks`)
+				return fetch(`${serverConstants.apiEndpoint}/channels/${channelId}/tracks`)
+					.then(res => res.json())
+					.then(tracks => {
+						this.setState({
+							tracks: this.transformTracksData(tracks)
+						})
+					})
 		}
 
-		transformChannelsIdData(channelsId)
+		fetchAllChannels(channelsId)
 		{
-				console.log(channelsId);
+
 				if (!channelsId){
 					return;
 				}
-				// 4. loop array fetch https://api.radio4000.com/v1/channels/ channel.id / tracks
+				// return this.getApiTracks()
 				return channelsId.map(channelId => {
 					this.getApiTracks(channelId)
 				})
 		}
 
-		// 1. fetch all channel https://api.radio4000.com/v1/channels
-		// 2. get all channel.id
-		// 3. store the ids in an array
-		// 5. get all track.ytid
-		// 6. store the ytids in an array
-		// 7. remove all unique entry
-		// 8. compare the rest to find most frequetnt entry, store it, remove it, repeat.
-
-
+		transformTracksData(tracks)
+		{
+				if (!tracks){
+					return ;
+				}
+				return tracks.map(track => {
+					if (!track.ytid){
+						return;
+					}
+					return track.ytid;
+				})
+		}
 
 		componentDidMount()
 		{
 				this.getApiChannels().then(channels => {
 						this.setState({
 							channels,
-							channelsId: this.transformChannelsData(channels),
-						});
-						// console.log();
-						this.transformChannelsIdData(this.state.channelsId);
+							channelsId: this.transformChannelsData(channels)
+						})
+						this.fetchAllChannels(this.state.channelsId)
 				})
-
 				.catch();
+
 		}
 
 		render()
