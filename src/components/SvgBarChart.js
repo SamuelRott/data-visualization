@@ -13,17 +13,18 @@ class SvgBarChart extends React.Component
 			super(props);
 			this.state = {
 				channels: null,
-				d3Data: null,
-				tracks: null
+				d3Data: null
 			}
 	}
 
+	// fetch all channels
 	getApi()
 	{
 		return fetch(`${serverConstants.apiEndpoint}/channels`)
 			.then(res => res.json())
 	}
 
+	// return array of objects
 	transformChannelsData(channels)
 	{
 			if (!channels){
@@ -46,8 +47,6 @@ class SvgBarChart extends React.Component
 
 	}
 
-
-
 	displaySvgBarChart()
 	{
 			const min = d3.min(this.state.d3Data, x => x.value);
@@ -55,9 +54,12 @@ class SvgBarChart extends React.Component
 			const width = window.innerWidth;
 			const barHeight = 25;
 
+			// sort data to have a descending effect
 			const r4Data = this.state.d3Data.sort(function (a, b) {return a.value - b.value;}).reverse();
 
-			const firstsNChannels = take(r4Data, 50);
+			// Take first 50 channels for display purpose
+			const n = 50;
+			const firstsNChannels = take(r4Data, n);
 
 			const scale = d3.scaleLinear()
 				.domain([min, max])
@@ -88,34 +90,18 @@ class SvgBarChart extends React.Component
 
 	}
 
-	numberOfTracks(channels)
-	{
-		if (!channels){
-			return;
-		}
-		return channels.map(channelValue => {
-			if (!channelValue.tracks){
-				return 0;
-			}
-			return channelValue.tracks.length;
-		})
-	}
-
-
 	componentDidMount()
 	{
 
 			this.getApi().then(channels => {
 				this.setState({
 					channels,
-					d3Data: this.transformChannelsData(channels),
-					tracks: this.numberOfTracks(channels)
+					d3Data: this.transformChannelsData(channels)
 				});
 				this.displaySvgBarChart();
 
 			})
 			.catch();
-
 
 	}
 
@@ -126,8 +112,6 @@ class SvgBarChart extends React.Component
 			return (
 
 				<div>
-					<h1>Currently {sum(this.state.tracks)} tracks on radio4000</h1>
-					<br/>
 					<h1>First 50 channels</h1>
 					<br/>
 					<svg className="SvgBarChart" ref={(r) => this.chart = r}></svg>
