@@ -17,12 +17,14 @@ class SharedTrack extends React.Component
 				}
 		}
 
+		// fetch all channels
 		getApiChannels()
 		{
 				return fetch(`${serverConstants.apiEndpoint}/channels`)
 					.then(res => res.json())
 		}
 
+		// return [channelsId]
 		transformChannelsData(channels)
 		{
 				if (!channels){
@@ -37,37 +39,40 @@ class SharedTrack extends React.Component
 
 		}
 
-		getApiTracks(channelId)
-		{
-				// radio with tracks
-				// return fetch(`${serverConstants.apiEndpoint}/channels/-J_Gj6nryBGVLHrmfZ10/tracks`)
-				// radio with no tracks
-				// return fetch(`${serverConstants.apiEndpoint}/channels/-KbLsrdpcPPkGHzXyVBX/tracks`)
-				return fetch(`${serverConstants.apiEndpoint}/channels/${channelId}/tracks`)
-					.then(res => res.json())
-					.then(tracks => {
-						this.setState({
-							tracks: this.transformTracksData(tracks)
-						})
-					})
-		}
-
+		// loop [channelsId] fetch a channel/tracks
 		fetchAllChannels(channelsId)
 		{
 
 				if (!channelsId){
 					return;
 				}
-				// return this.getApiTracks()
 				return channelsId.map(channelId => {
 					this.getApiTracks(channelId)
 				})
 		}
 
+		// fetch a channel/tracks merge then in one array
+		getApiTracks(channelId)
+		{
+				// radio with tracks
+				// return fetch(`${serverConstants.apiEndpoint}/channels/-J_Gj6nryBGVLHrmfZ10/tracks`)
+				// radio without tracks
+				// return fetch(`${serverConstants.apiEndpoint}/channels/-KbLsrdpcPPkGHzXyVBX/tracks`)
+				return fetch(`${serverConstants.apiEndpoint}/channels/${channelId}/tracks`)
+					.then(res => res.json())
+					.then(tracks => {
+						this.setState({
+							// tracks: [...this.state.tracks, ...this.transformTracksData(tracks)]
+							tracks: this.transformTracksData(tracks)
+						})
+					})
+		}
+
+		// return [ytids]
 		transformTracksData(tracks)
 		{
 				if (!tracks){
-					return ;
+					return;
 				}
 				return tracks.map(track => {
 					if (!track.ytid){
