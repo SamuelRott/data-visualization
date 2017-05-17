@@ -46,6 +46,7 @@ class App extends React.Component
         return (
             <Container>
               <TracksAmount channels= {this.state.channels}/>
+              <SharedTrack/>
               <SvgBarChart channels= {this.state.channels}/>
             </Container>
         );
