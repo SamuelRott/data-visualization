@@ -6,21 +6,12 @@ import 'whatwg-fetch';
 
 import serverConstants from 'src/constants/server';
 
-class SvgBarChart extends React.Component
+class TracksAmount extends React.Component
 {
 		constructor(props)
 		{
 				super(props);
-				this.state = {
-					tracks: null
-				}
-		}
 
-		// fetch all channels
-		getApi()
-		{
-			return fetch(`${serverConstants.apiEndpoint}/channels`)
-				.then(res => res.json())
 		}
 
 		// return ammount of tracks per channel
@@ -37,26 +28,15 @@ class SvgBarChart extends React.Component
 			})
 		}
 
-
-		componentDidMount()
-		{
-
-				this.getApi().then(channels => {
-					this.setState({
-						tracks: this.numberOfTracks(channels)
-					});
-				})
-				.catch();
-		}
-
-
 		render()
 		{
+
+				const amountData = this.numberOfTracks(this.props.channels);
 
 				return (
 
 					<div>
-						<h1>Currently {sum(this.state.tracks)} tracks on radio4000</h1>
+						<h1>Currently {sum(amountData)} tracks on radio4000</h1>
 					</div>
 
 				);
@@ -64,4 +44,4 @@ class SvgBarChart extends React.Component
 
 }
 
-export default ( SvgBarChart )
+export default ( TracksAmount );
