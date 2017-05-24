@@ -6,6 +6,7 @@ import SvgBarChart from 'src/components/SvgBarChart';
 // import SharedTrack from 'src/components/SharedTrack';
 import TracksAmount from 'src/components/TracksAmount';
 import AutoComplete from 'src/components/AutoComplete';
+import ActiveChannels from 'src/components/ActiveChannels';
 
 
 import serverConstants from 'src/constants/server';
@@ -47,7 +48,7 @@ class App extends React.Component
     {
         return (
             <Container>
-              <AutoComplete />
+              <ActiveChannels />
               <TracksAmount channels= {this.state.channels}/>
               <SvgBarChart channels= {this.state.channels}/>
             </Container>
