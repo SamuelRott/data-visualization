@@ -1,43 +1,60 @@
 import React  from "react";
 import debounce from "lodash/debounce";
 import map from "lodash/map";
+import filter from "lodash/filter";
 
 class ActiveChannels extends React.Component {
+
 	constructor(props) {
 		super(props);
-		this.state = {
-			lastActiveDay: null
+	}
+
+	handleData = (channels) => {
+		if (!channels){
+			return;
 		}
+		return channels.map(channelValue => {
+			// to filter empty channels and if its empty it cant be updated = 0 for timestamp
+			if (!channelValue.tracks) {
+				return {
+					timestamp: 0,
+					title: channelValue.title,
+					tracks: 0
+				}
+			}
+			// to filter out undefined timestamp
+			else if (!channelValue.updated) {
+				return {
+					timestamp: 0,
+					title: channelValue.title,
+					tracks: channelValue.tracks.length
+				}
+			}
+			return {
+				timestamp: channelValue.updated,
+				title: channelValue.title,
+				tracks: channelValue.tracks.length
+			}
+		})
 	}
 
 
-
-	// wait 1 seconde after last key stroke before fetching api
-	// use lodash debounce function
-	waitForFetch = debounce((lastActiveDay) => {
-		this.getApi(lastActiveDay);
-	}, 300)
-
-	// fetch api with the input value as query value, return an array of radio4000 channels
-	getApi = (lastActiveDay) => {
-		return fetch(`https://api.radio4000.com/v1/channels?created.gt=1`)
-			.then(res => res.json())
-			.then(console.log)
-	}
-
-	calculateDate = () => {
+	calculateDate = (channels) => {
+		const timestamp = this.handleData(channels);
 		const now = Date.now();
 		const thirtyDays = 2592000000;
 		const lastActiveDay = now - thirtyDays;
-		this.waitForFetch(lastActiveDay)
+		const ActiveChannels = filter(timestamp, (channels) => {
+			return channels.timestamp > lastActiveDay
+		});
+		console.log(ActiveChannels);
 	}
 
 	componentDidMount() {
-		this.calculateDate();
 	}
 
 	render() {
-
+		this.calculateDate(this.props.channels);
 
 		return (
 
