@@ -1,0 +1,23 @@
+{
+  "name": "data-visualization",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "d3": "^4.8.0",
+    "lodash": "^4.17.4",
+    "prop-types": "^15.5.10",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
+    "whatwg-fetch": "^2.0.3"
+  },
+  "devDependencies": {
+    "react-scripts": "1.0.7"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "deploy": "react-scripts build && surge build r4-visualization.surge.sh && mv build/200.html build/index.html"
+  }
+}
