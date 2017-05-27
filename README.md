@@ -10,6 +10,12 @@ Dev link [http://r4-visualization.surge.sh/](http://r4-visualization.surge.sh/).
 
 Thank you [pfft](https://github.com/jfalxa/pfft)
 
+## Ideas
+
+1. only get channels active in last 30 days
+2. get most added track the last 30 days
+3. how many tracks added the last 30 days
+
 ## Scripts
 
 - `yarn start` to start dev server

@@ -1,11 +1,12 @@
 import React  from 'react';
 import styled from 'styled-components';
-
+import propTypes from 'prop-types';
 import BarChart from 'src/components/BarChart';
 import SvgBarChart from 'src/components/SvgBarChart';
 // import SharedTrack from 'src/components/SharedTrack';
 import TracksAmount from 'src/components/TracksAmount';
 import AutoComplete from 'src/components/AutoComplete';
+import ActiveChannels from 'src/components/ActiveChannels';
 
 
 import serverConstants from 'src/constants/server';
@@ -16,8 +17,7 @@ const Container = styled.div`
 
 class App extends React.Component
 {
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
         this.state = {
           channels: null,
@@ -26,28 +26,32 @@ class App extends React.Component
     }
 
     // fetch all channels
-    getApi()
-    {
-      return fetch(`${serverConstants.apiEndpoint}/channels`)
+    getApi = () => {
+      return fetch(`${serverConstants.localChannels}`)
         .then(res => res.json())
     }
 
-    componentDidMount()
-		{
-
-				this.getApi().then(channels => {
-					this.setState({
-          	channels
-					});
-				})
-				.catch();
+    componentDidMount() {
+			this.getApi().then(channels => {
+				this.setState({
+        	channels
+				});
+			})
+			.catch();
 		}
 
     render()
     {
+        if(this.state.channels === null) {
+          return (
+            <div>
+              Loading...
+            </div>
+          )
+        }
         return (
             <Container>
-              <AutoComplete />
+              <ActiveChannels channels= {this.state.channels} />
               <TracksAmount channels= {this.state.channels}/>
               <SvgBarChart channels= {this.state.channels}/>
             </Container>
