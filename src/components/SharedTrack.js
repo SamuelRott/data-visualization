@@ -1,13 +1,11 @@
 import React  from 'react';
-import * as d3 from 'd3';
-import compact from 'lodash/compact';
 import flatten from 'lodash/flatten';
 import countBy from 'lodash/countBy';
 import map from 'lodash/map';
 import sortBy from 'lodash/sortBy';
 import 'whatwg-fetch';
 
-import serverConstants from 'src/constants/server';
+import serverConstants from './../constants/server';
 
 class SharedTrack extends React.Component
 {
@@ -87,19 +85,6 @@ class SharedTrack extends React.Component
 				})
 		}
 
-		transformTracksData(tracks)
-		{
-				if (!tracks){
-					return;
-				}
-				return tracks.map(track => {
-					if (!track.ytid){
-						return;
-					}
-					return track.ytid;
-				})
-		}
-
 		// remove all unique entry
 		only_duplicates(tracks)
 		{
@@ -125,6 +110,7 @@ class SharedTrack extends React.Component
 						return this.transformChannelsData(channels)
 				})
 				.then( channelsId => this.fetchAllChannels(channelsId))
+				.then(console.log)
 				.then( tracks => flatten(tracks))
 				.then( tracks => this.transformTracksData(tracks))
 				.then( ytdis => this.only_duplicates( ytdis ))
@@ -136,7 +122,6 @@ class SharedTrack extends React.Component
 						}}
 				))
 				.then( ytids => sortBy(ytids, 'amount' ).reverse() )
-				.then( ytids => console.log(ytids))
 				.catch();
 
 		}

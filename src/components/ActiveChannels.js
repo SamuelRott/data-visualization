@@ -41,7 +41,6 @@ class ActiveChannels extends React.Component {
 		const ActiveChannels = filter(timestamp, (channels) => {
 			return channels.timestamp > lastActiveDay
 		});
-		console.log(ActiveChannels);
 	}
 
 	componentDidMount() {

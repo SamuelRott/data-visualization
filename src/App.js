@@ -1,7 +1,7 @@
 import React  from 'react';
 // import BarChart from './components/BarChart';
 import SvgBarChart from './components/SvgBarChart';
-// import SharedTrack from './components/SharedTrack';
+import SharedTrack from './components/SharedTrack';
 import TracksAmount from './components/TracksAmount';
 // import AutoComplete from './components/AutoComplete';
 // import ActiveChannels from './components/ActiveChannels';
@@ -39,6 +39,7 @@ class App extends React.Component
     {
         return (
             <div className="Container">
+              <SharedTrack/>
               <TracksAmount channels= {this.state.channels}/>
               <SvgBarChart channels= {this.state.channels}/>
             </div>
