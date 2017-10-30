@@ -1,11 +1,11 @@
 import React  from 'react';
 import styled from 'styled-components';
-import propTypes from 'prop-types';
-import BarChart from 'src/components/BarChart';
+// import propTypes from 'prop-types';
+// import BarChart from 'src/components/BarChart';
 import SvgBarChart from 'src/components/SvgBarChart';
 // import SharedTrack from 'src/components/SharedTrack';
-import TracksAmount from 'src/components/TracksAmount';
-import AutoComplete from 'src/components/AutoComplete';
+// import TracksAmount from 'src/components/TracksAmount';
+// import AutoComplete from 'src/components/AutoComplete';
 import ActiveChannels from 'src/components/ActiveChannels';
 
 
@@ -17,43 +17,56 @@ const Container = styled.div`
 
 class App extends React.Component
 {
-    constructor(props) {
+    constructor(props) 
+    {
         super(props);
         this.state = {
-          channels: null,
-					tracks: null
-				}
+            channels : null,
+            tracks   : null
+        };
     }
 
-    // fetch all channels
-    getApi = () => {
-      return fetch(`${serverConstants.localChannels}`)
-        .then(res => res.json())
+    getChannels = () =>
+    {
+        return fetch(`${serverConstants.localChannels}channels.json`)
+        .then(res => res.json());
+    };
+
+    getTracks = () =>
+    {
+        return fetch(`${serverConstants.localChannels}tracks.json`)
+          .then(res => res.json());
+    };
+
+    componentDidMount()
+    {
+        this.getChannels()
+          .then(channels => this.toArray(channels))
+          .then( channels => this.setState({channels}))
+          .then(() =>  this.getTracks())
+          .then(tracks => this.toArray(tracks))
+          .then(tracks => this.setState({tracks}))
+          .catch();
     }
 
-    componentDidMount() {
-			this.getApi().then(channels => {
-				this.setState({
-        	channels
-				});
-			})
-			.catch();
-		}
+    toArray = (firebaseObj) =>
+    {
+        return Object.keys(firebaseObj).map(id =>
+        {
+            return Object.assign(firebaseObj[id], {id});
+        });
+    };
 
     render()
     {
-        if(this.state.channels === null) {
-          return (
-            <div>
-              Loading...
-            </div>
-          )
-        }
+        console.log('this.state', this.state);
         return (
             <Container>
-              <ActiveChannels channels= {this.state.channels} />
-              <TracksAmount channels= {this.state.channels}/>
-              <SvgBarChart channels= {this.state.channels}/>
+              <ActiveChannels
+                channels={this.state.channels || []}
+                tracks={this.state.tracks || []}
+              />
+              <SvgBarChart channels={this.state.channels || []}   />
             </Container>
         );
     }

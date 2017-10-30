@@ -15,6 +15,14 @@ class SvgBarChart extends React.Component
 	}
 
 
+  toArray = (firebaseObj) =>
+  {
+    return Object.keys(firebaseObj).map(id =>
+    {
+      return Object.assign(firebaseObj[id]);
+    });
+  };
+
 	// return array of objects
 	transformChannelsData(channels)
 	{
@@ -22,7 +30,11 @@ class SvgBarChart extends React.Component
 			if (!channels){
 				return;
 			}
+			debugger;
 			return channels.map(channel => {
+
+
+
 				if (!channel.tracks){
 					return {
 						value: 0,
@@ -30,8 +42,10 @@ class SvgBarChart extends React.Component
 						title: channel.title
 					};
 				}
+
+
 				return {
-					value: channel.tracks.length,
+					value: this.toArray(channel.tracks).length,
 					slug: channel.slug,
 					title: channel.title
 				}
@@ -42,10 +56,11 @@ class SvgBarChart extends React.Component
 	displaySvgBarChart(d3Data)
 	{
 
-			if (!d3Data){
-				return;
+			if (!d3Data)
+			{
+					return;
 			}
-			
+
 			const min = d3.min(d3Data, x => x.value);
 			const max = d3.max(d3Data, x => x.value);
 			const width = window.innerWidth;

@@ -1,6 +1,5 @@
 const serverConstants = {
-	apiEndpoint: 'https://api.radio4000.com/v1',
-	localChannels: '/data/channels.json'
+  localChannels: 'https://radio4000.firebaseio.com/',
 }
 
 
